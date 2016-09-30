@@ -17,5 +17,8 @@ fi
 
 if [ -n "$TIMEZONE" ]; then
     msg "Setting up timezone to '${TIMEZONE}'..."
-    ln -sf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
+    [ -L /etc/localtime ] && _tzlink=$(readlink /etc/localtime)
+    if [ "/usr/share/zoneinfo/$TIMEZONE" != "$_tzlink" ]; then
+        ln -sf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
+    fi
 fi
